@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("./user.model");
 const validator = require("validator");
-const { shouldUpdateReps } = require("./utils");
+const { shouldUpdateReps } = require("./user.utils.js");
 
 async function userSignUp(req, res) {
   const { username, password, email } = req.body;
