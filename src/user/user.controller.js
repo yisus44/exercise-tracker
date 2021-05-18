@@ -1,16 +1,62 @@
 const bcrypt = require("bcrypt");
 const User = require("./user.model");
-
+const validator = require("validator");
 const { shouldUpdateReps } = require("./utils");
 
 async function userSignUp(req, res) {
   const { username, password, email } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await new User({
       username,
       password: hashedPassword,
       email,
+    });
+
+    if (!validator.isEmail(email)) {
+      throw new Error("Invalid data.");
+    }
+    await newUser.save();
+    res.send({ newUser });
+  } catch (err) {
+    console.log(err);
+    res.send({ error: "Something went wrong" });
+  }
+}
+
+async function userSignUpWithFullInfo(req, res) {
+  const {
+    username,
+    password,
+    email,
+    weigth,
+    heigth,
+    bodyFat,
+    activityLevel,
+    maxChinUps,
+    maxPushUps,
+    maxSquats,
+    lastChinUps,
+    lastPushUps,
+    lastSquats,
+  } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await new User({
+      username,
+      password: hashedPassword,
+      email,
+      weigth,
+      heigth,
+      bodyFat,
+      activityLevel,
+      maxChinUps,
+      maxPushUps,
+      maxSquats,
+      lastChinUps,
+      lastPushUps,
+      lastSquats,
     });
     await newUser.save();
     res.send({ newUser });
@@ -39,10 +85,13 @@ async function userSignIn(req, res) {
   }
 }
 
-async function userLogWorkOut(req, res) {}
+async function userLogWorkOut(req, res) {
+  const { lastChinUps, lastSquats, lastPushUps } = req.body;
+}
 
 module.exports = {
   userSignUp,
   userSignIn,
   userLogWorkOut,
+  userSignUpWithFullInfo,
 };
