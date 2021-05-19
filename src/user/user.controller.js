@@ -43,6 +43,9 @@ async function userSignUpWithFullInfo(req, res) {
   } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+    if (!validator.isEmail(email)) {
+      throw new Error("Invalid data.");
+    }
     const newUser = await new User({
       username,
       password: hashedPassword,
@@ -88,10 +91,16 @@ async function userSignIn(req, res) {
 async function userLogWorkOut(req, res) {
   const { lastChinUps, lastSquats, lastPushUps } = req.body;
 }
+async function userUpdateInfo(req, res) {}
+async function userGetInfo(req, res) {}
+async function userGetReps(req, res) {}
 
 module.exports = {
   userSignUp,
   userSignIn,
   userLogWorkOut,
   userSignUpWithFullInfo,
+  userGetInfo,
+  userGetReps,
+  userUpdateInfo,
 };
