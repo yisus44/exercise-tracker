@@ -89,7 +89,13 @@ async function userSignIn(req, res) {
 }
 
 async function userLogWorkOut(req, res) {
-  const { lastChinUps, lastSquats, lastPushUps } = req.body;
+  const { chinUps, pushUps, squats, email } = req.body;
+  try {
+    shouldUpdateReps([chinUps, pushUps, squats]);
+    res.send({});
+  } catch (err) {
+    console.log(err);
+  }
 }
 async function userUpdateInfo(req, res) {}
 async function userGetInfo(req, res) {}
